@@ -1,0 +1,151 @@
+=======================================================
+How to get WebGL Texture Maps to work on Google Chrome 
+				(WebGL Programming Guide: Chap 5)
+=======================================================
+
+As we explore lighting and materials in WebGL, it's time to learn about the
+texture mapping methods we skipped earlier, back in Chapter 5.
+Skipped earlier because:
+ a) It was not yet appropriate, given how little we knew of shaders,
+ b) Chapter 5 offers no interesting use of texture-mapping in shaders, and
+ b) The book's 'starter code' doesn't work as-is -- does not draw anything, 
+	and instead shows 'DOMException' errors in the console, like this:
+
+	Typical error message:
+	"Uncaught DOMException: Failed to execute 'texImage2D' on 
+	 'WebGLRenderingContext':The image element contains cross-origin data, 
+	 and may not be loaded at Object.texImage2D ( File:///C:/path-to-our...
+	 /lib/webgl-debug.js:208:38) ... " 
+
+But now it's time to learn texture-mapping, because our Fragment Shaders could
+use texture values at each pixel to modify lighting, materials, normals and more.
+
+But we can't -- how do we stop the errors?
+
+In the Chapter 5 starter-code directories I supplied TWO versions of each program.
+Those with 'FILE' in the filename are the book's original files:
+ALL of them fail to to work if I drag-and-drop them into an open Chrome browser.
+
+The others work, but aren't very useful--they contain texture-image files as
+bulky 'base64'-format images!  That's not a very good solution...
+
+ WHY does file-reading FAIL for texture-mapping?
+
+ ANSWER: Because Chrome (and any other secure web-browser) routinely prevents 
+	'cross-domain' file loading for any HTML file(s) run with from a URL 
+	that begins with "file:///", and that includes all the HTML files
+	we 'drag-and-drop' onto our browsers.
+	
+That 'cross-domain' prohibition is vitally important -- it helps ensure that 
+your computer's filesystem can't be read or modified by a web-page!
+
+What can we do?
+Here's a terse-but-good answer: 
+https://threejs.org/docs/#manual/introduction/How-to-run-things-locally 
+ 
+Here's are my answers:
+==================================================
+The SAFE (but clumsy) CONVENIENT ANSWER:
+==================================================
+Convert each of your texture images to 'base64'- format string to store inside
+your HTML file or in a JavaScript file, as described here: 
+https://tp69.wordpress.com/2013/06/17/cors-bypass/
+(and a better site for the base64 encoding:
+ http://websemantics.co.uk/online_tools/image_to_data_uri_convertor/ )
+
+That's what I did on the 2nd version of the starter code.
+Just drag-and-drop on the browser; it works!
+This method works, but expands the size of the image file by about 3X, bloats 
+your JavaScript file with incomprehensible junk, and won't let you switch 
+easily from one texture-image file to another. Not a good long-term solution.
+
+=========================================================
+--The MOST-SAFE, MOST-ELEGANT (but inconvenient) ANSWER : 
+=========================================================
+Don't drag-and-drop HTML files into your browser. Stop doing that!
+Act like a real web-developer -- access them through a local web-server instead.
+	HOW?  -- This text file explains:   
+
+	HOW_TO_nodeJS_LocalWebServer.txt
+	
+==============================================
+--The (dangerous!) ELEGANT, CONVENIENT ANSWER:
+==============================================
+1) CLOSE all running instances of Chrome.
+2) RESTART Chrome with the security cross-domain features disabled,
+	by applying this command-line switch:
+		--allow-file-access-from-files
+
+   This friendly website explains all the other Chrome command line switches as well:  http://peter.sh/experiments/chromium-command-line-switches/		
+	
+RESULT:
+--drag-and-drop works again--texture maps with no error messages.
+*** BUT *** your browser is now VERY VULNERABLE to web-based attacks!!
+***NEVER*** visit ANY websites with this setting!! 
+*** HUGE*** RISKS: all websites & advertisers can read all your files!!
+
+But HOW should I start this dangerously-disabled version of Chrome?
+ -- You could do it from the command-line each time, but that's bothersome.
+ -- We DON'T want to use this new argument as the default for Chrome, 
+ 	because that would vastly reduce security for everyday web-browsing.  
+Instead, make your own custom 'INSECURE-Chrome' shortcut that includes this 
+argument when it starts Chrome, and use it for our coursework only.
+	CAUTION! CLOSE ALL Chrome windows first.
+	otherwise your 'INSECURE-Chrome' shortcut will fail to reduce security.
+
+For Windows machines:
+=========================
+1) Find the command line that starts Chrome.  For Win10, it's easy:
+	-- Start Chrome (already running? just look for its icon in the taskbar)
+	-- Right-click the Chrome icon in the task-bar.
+	-- Near the bottom of the pop-up context menu that appears, 
+		find the 'Google Chrome' menu item, right-click again;
+		--Near the bottom of the new pop-up context menu that appears,
+		click on 'Properties'.
+	-- A new 'Google Chrome Properties' window appears, with several tabs
+		near the top.  Click on the 'Shortcut' tab.
+	-- In the middle of the 'ShortCut' tab,
+		--In the 'Target:' window you'll see the absolute path to the 
+			Chrome executable in quotes (something like this):
+
+		"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+	
+		--Copy that text (NotePad or another simple text editor might help)
+
+2) Create a new shortcut:
+	--right-click on your desktop --> New --> ShortCut... 
+	--In the pop-up window that appears, give the Chrome location that
+		you found in the previous step (e.g. "C:\Program Files (x86)...")
+	--Press 'Next', give shortcut name (e.g. INSECURE Chrome), click 'finish'
+
+3) Modify the shortcut's command-line or 'Target':
+	--Right-click on the new icon you just made: select 'Properties'
+	--At the top of the pop-up window that appears, select 'shortcut' tab.
+	--In the 'Target' edit box, you should find the location that you entered 
+		earlier. At the end of it, append this command-line argument:
+		      --allow-file-access-from-files
+	--be careful! 
+		--You must have administrator access to do this, and
+		--you must add text AFTER any existing quotes in 'Target', and
+		--the appended text begins with a space, then double dash (--) and 
+		--the result should look something like this:
+
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --allow-fileaccess-from-files
+
+4) -- BE SURE you close all other Chrome windows before you use this shortcut.
+(otherwise Chrome ignores the command-line switch).
+   -- Use the shortcut to start Chrome, and make sure it can run Chapter 5 texture-map programs (e.g. drag-and-drop the starter-code HTML files whose names end with FILE.html to your newly-opened Chrome Browser).
+
+For Apple Machines:
+=========================
+(my ancient Mac Mini isn't WebGL capable; please test and correct this for me if there's a better way)
+
+1) Start the Terminal (apps-->utilities-->terminal).
+2) Start Chrome from the command-line of the terminal, but use the extra argument:
+
+$ open "/Applications/Google Chrome.app" --args -–allow-file-access-from-files 
+
+3) However, that's a pain to do.  Instead, here is a compressed (ZIP) file that contains all you need to make a click-able icon to access Chrome with the proper settings to allow texture mapping:
+
+    Mac_ChromeShrotcutToAllowWebGLtextureFileReads.zip
+

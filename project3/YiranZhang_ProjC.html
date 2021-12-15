@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Lighting and Rendering</title>
+</head>
+<body onload="main()">
+    <canvas id="webgl" width="1450" height="500">
+        Please use a browser that supports "canvas"
+        </canvas>
+
+    <p>To tilt the camera up down left right use wsad. To move the camera foward and backwar, use up and down arrow key. To turn on and off the headlight, press H. To turn on and off worldlight, press I. Press M to switch mode. Edit the light using the input fields below!</p>
+    <div class="slidecontainer">
+
+        <tr>
+        <td>Ambient(0,255): </td>
+        <td>R: <input type="range" min="0" max="255" value="127" class="slider" id="AR"></td>
+        <td>G: <input type="range" min="0" max="255" value="127" class="slider" id="AG"></td>
+        <td>B: <input type="range" min="0" max="255" value="127" class="slider" id="AB"></td>
+        </tr>
+        <br>
+
+        <tr>
+        <td>Diffuse(0,255): </td>
+        <td>R:<input type="range" min="0" max="255" value="51" class="slider" id="DR"></td>
+        <td>G:<input type="range" min="0" max="255" value="153" class="slider" id="DG"></td>
+        <td>B:<input type="range" min="0" max="255" value="178" class="slider" id="DB"></td>
+        </tr>
+        <br>
+
+        <tr>
+        <td>Specular(0,255): </td>
+        <td>R:<input type="range" min="0" max="255" value="255" class="slider" id="SR"></td>
+        <td>G:<input type="range" min="0" max="255" value="204" class="slider" id="SG"></td>
+        <td>B:<input type="range" min="0" max="255" value="255" class="slider" id="SB"></td>
+        </tr>
+        <br>
+
+        <tr>
+        <td>Position(-10,10): </td>
+        <td>X:<input type="range" min="-10" max="10" value="-2" class="slider" id="PX"></td>
+        <td>Y:<input type="range" min="-10" max="10" value="2" class="slider" id="PY"></td>
+        <td>Z:<input type="range" min="-10" max="10" value="5" class="slider" id="PZ"></td>
+        </tr>
+      </div>
+    <p id="lMode">Light Mode: Phong lighting with Phong Shading</p>
+    <canvas id="webgl"></canvas>
+
+    <script src="lib/webgl-utils.js"></script>
+    <script src="lib/webgl-debug.js"></script>
+    <script src="lib/cuon-utils.js"></script>
+    <script src="lib/cuon-matrix-quat.js"></script>
+    <script src="lib/materials_Ayerdi.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/VBO.js"></script>
+    <script src="js/makeObj.js"></script>
+    <script src="js/drawScene.js"></script>
+    <script src="js/keyBehavior.js"></script>
+    <script src="js/shaders.js"></script>
+    <script src="js/animate.js"></script>
+</body>
+</html>
+
+<style>
+    canvas{
+        padding:0px;
+    }
+</style>

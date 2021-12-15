@@ -1,0 +1,116 @@
+=======================================================
+How to set up a nodeJS webServer on your computer
+(THIS is the RIGHT THING TO DO!)
+=======================================================
+
+WHY does the book's Chapter 5 texture-map 'starter code' fail to run? 
+
+ ANSWER: Google Chrome's default file-permission settings prohibit its use!
+	Chrome (and any other secure web-browser) routinels prevents 
+	'cross-domain' file loading for any HTML file(s) run with from a URL 
+	that begins with "file:///", and that includes all the HTML files
+	we 'drag-and-drop' onto our browsers.
+	
+	Typical error message:
+	"Uncaught DOMException: Failed to execute 'texImage2D' on 
+	 'WebGLRenderingContext':The image element contains cross-origin data, 
+	 and may not be loaded at Object.texImage2D ( File:///C:/path-to-our...
+	 /lib/webgl-debug.js:208:38) ... " 
+	
+That 'cross-domain' prohibition is vitally important -- it helps ensure that 
+your computer's filesystem can't be read or modified by a web-page!
+
+What can we do?  This file:
+
+	_HowToMakeChrome_AllowTextureMap.txt
+
+gives you 2 other answers: 
+  a) --safe (but-VERY CLUMSY) convenient answer: 
+	convert each image into a gigantic text string in 'base64' format, 
+	and embed those huge strings in your HTML or JavaScript file(s).
+  b) --VERY UNSAFE, elegant, convenient answer:
+	temporarily DISABLE your Chrome browser's protections against 
+	cross-domain file transfers. You can then drag-and-drop HTML files into
+	your (unsafe) browser, and the browser will read files from your computer.
+	(but don't visit any websites! if you do, THEY can read your files too!)
+
+But this file gives you:
+=========================================================
+--The MOST-SAFE, MOST-ELEGANT (but inconvenient) ANSWER : 
+=========================================================
+Don't drag-and-drop HTML files into your browser. 
+	Stop doing that!
+Act like a real web-developer -- create a real webpage!
+	access its files through a local web-server instead.
+
+	HOW?!?!
+	This excellent tutorial shows how to make a LOCAL server using node.js:
+	https://webglfundamentals.org/webgl/lessons/webgl-setup-and-installation.html
+
+	To read AND WRITE files, here's another good tutorial site:
+	https://games.greggman.com/game/saving-and-loading-files-in-a-web-page/
+	
+	
+But here's a quicker summary:
+0) DEFINITIONS:
+	--Node.js is a complete, widely-used JavaScript runtime environment,
+	  used to develop, debug, and run JavaScript programs locally, 
+	  natively, separately and independently from your web-browser(s).
+	--NPM is the (N)ode.js (P)ackage (M)anager -- the part of node.js that
+	  lets you install, remove, and update node.js and just about every
+	  possible tool, extension, or plug-in available for it.
+	
+1) Download the node.js run-time environment and install it:
+	--MS Windows: 
+		go to the http://nodeJS.org site.  
+		Get the 'recommended for most users' version. Install.
+		In 'Start' menu, run 'nodeJS command prompt' (desktop app)
+		In the command-prompt menu that opens, type:
+
+			npm -g install http-server
+
+		It will download the latest version and install it.
+
+	--Apple Mac:  read this site first:  (allows easy uninstall later)
+ 		http://blog.teamtreehouse.com/install-node-js-npm-mac
+		and if you don't care about all that 'homebrew' stuff, 
+		just download and install from http://nodeJS.org , then
+
+			sudo npm -g install http-server
+		
+2) Start your now-installed http-server:
+	--MS Windows: Start' menu, run 'nodeJS command prompt' (desktop app)
+	--Apple Mac: in your terminal window,
+     Use either of these methods:
+		METHOD A:
+		========
+		--Change directory to the one we will 'serve' to the browser,
+			the one with your (uncompressed) starter code, e.g.
+
+		      WINDOWS> cd C:\path\to\my\StarterCode_Week09_Texture'
+			(this directory holds 'ch05' and 'lib' directories)
+
+		or  APPLE-MAC> cd C:/path/to/my/StarterCode_Week09_Texture
+
+		--Then start the http server:
+			http-server
+
+	OR use METHOD B:
+		=========
+		--combine the 2 steps like this::
+			http-server path\to\my\starter\code\folder
+					
+3) USE the http-server!  On startup it prints out a few numerical URLs, e.g.
+
+		Starting up http-server, serving ./
+		   http://10.105.158.197:8080
+		   http://127.0.0.1:8080
+		Hit CTRL-C to stop the server.	
+
+	METHOD A: cut-and-paste either of them into your browser, or
+	METHOD B: aim the browser at 'localhost':
+     			http://localhost:8080
+		  --want to start in the ch05 subdirectory? do this:
+			 http://localhost:8080/ch05
+4) When done, CTRL-C to stop your http-server.
+
